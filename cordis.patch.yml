@@ -1,0 +1,14 @@
+# dsh-boot-nexus — DSH bundle patch.
+#
+# Exactly one insert row. The id is the settings namespace as well: the Host
+# settings service discovers this entry's `Config` export by the id in this
+# patch, and the browser card registers under the same string. Renaming the id
+# silently orphans the settings card, so treat it as part of the contract.
+#
+# The old plugins (dsh-boot-suite, boot-animation) must be disabled in the
+# profile patch while this one is enabled. Nexus detects their rows and yields
+# instead of racing them, but yielding means "no boot animation", not "both".
+
+- insert:
+    - id: boot-nexus
+      name: dsh-boot-nexus

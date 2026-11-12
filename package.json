@@ -1,0 +1,60 @@
+{
+  "name": "dsh-boot-nexus",
+  "version": "0.5.2",
+  "description": "Unified boot screen, wallpaper and screensaver for DeepSeek Harness — one overlay, one state machine, one config.",
+  "icon": "assets/icon/icon-128.png",
+  "license": "MIT",
+  "author": "zeki520",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zeki520/dsh-boot-nexus.git"
+  },
+  "bugs": {
+    "url": "https://github.com/zeki520/dsh-boot-nexus/issues"
+  },
+  "homepage": "https://github.com/zeki520/dsh-boot-nexus#readme",
+  "keywords": [
+    "dsh",
+    "deepseek-harness",
+    "plugin",
+    "boot-animation",
+    "splash-screen",
+    "screensaver",
+    "suite"
+  ],
+  "type": "module",
+  "main": "src/index.js",
+  "exports": {
+    ".": "./src/index.js",
+    "./client": "./src/client/index.js",
+    "./icon": "./assets/icon/icon-128.png",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "src",
+    "lib",
+    "assets",
+    "cordis.patch.yml",
+    "README.md",
+    "LICENSE"
+  ],
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "platform": "web"
+    }
+  },
+  "peerDependencies": {
+    "@deepseek-ai/schemastery": "^3.18.0"
+  },
+  "engines": {
+    "node": ">=22.19.0"
+  },
+  "scripts": {
+    "build": "node scripts/build-runtime.mjs",
+    "test": "node scripts/build-runtime.mjs && node --test test/*.test.mjs",
+    "verify:installed": "node scripts/verify-installed.mjs"
+  }
+}

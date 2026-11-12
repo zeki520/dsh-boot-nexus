@@ -1,0 +1,15 @@
+{
+  "version": "0.5.2",
+  "bytes": 58284,
+  "sha256": "b6cd67223e65afb149553786660872b34a9dd7339cb4f3afd5db953630ae6d18",
+  "files": [
+    "00-constants.js",
+    "10-fsm.js",
+    "20-clock.js",
+    "30-media.js",
+    "35-scene.js",
+    "37-suite.js",
+    "40-stage.js",
+    "50-boot.js"
+  ]
+}

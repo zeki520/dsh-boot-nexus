@@ -1,0 +1,10 @@
+{
+  "schemaVersion": 1,
+  "id": "division-bigfish-codex",
+  "name": "全景大肥鱼-含彩蛋版",
+  "engine": "iframe",
+  "entry": "index.html",
+  "author": "LeeRolling",
+  "description": "全景大肥鱼风格的代码动画（含掉线彩蛋），五句配音可配效果。",
+  "duration": 33.4
+}

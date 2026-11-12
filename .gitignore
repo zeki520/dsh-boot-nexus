@@ -1,0 +1,19 @@
+# Dependencies and build output never belong in the repo.
+node_modules/
+*.tgz
+
+# Local scratch: probe dumps, offline render harnesses, screenshots, backups.
+.tmp*/
+*.bak
+*.log
+
+# User-imported suite templates (media the user dropped in themselves).
+assets/suite/templates/custom-*/
+assets/suite/templates/*/assets/*.tmp
+
+# Editor / OS noise.
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/

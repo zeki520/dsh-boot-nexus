@@ -1,0 +1,45 @@
+*{box-sizing:border-box}body{margin:0;background:#111;color:#bbb;font:14px 'Segoe UI','Microsoft YaHei',sans-serif}main{display:grid;grid-template-columns:minmax(0,1fr) 320px;min-height:100vh}#stage{background:#000;display:grid;align-items:center}svg{width:100%;max-height:100vh;aspect-ratio:16/9}aside{padding:25px;background:#181818;overflow:auto}h1{font-size:19px;color:#ed9a37;margin:0 0 25px}label{display:block;margin:14px 0;font-size:12px}input:not([type=range]),textarea{display:block;width:100%;margin-top:7px;padding:9px;background:#101010;color:#ddd;border:1px solid #424242;font:14px inherit}input[type=range]{display:block;width:100%;accent-color:#df8b26;margin-top:10px}button{padding:8px 10px;background:#29231c;color:#ddd;border:1px solid #685034;cursor:pointer}.buttons{display:flex;gap:8px;flex-wrap:wrap;margin:16px 0}p{font-size:12px;line-height:1.8;color:#888}hr{border:0;border-top:1px solid #333;margin:24px 0}#description{color:#a5a5a5;font:19px/1.35 'Microsoft YaHei',sans-serif;overflow:hidden;word-break:break-word;height:58px}#stage:fullscreen{width:100vw;height:100vh}#stage:fullscreen svg{width:100%;height:100%}@media(max-width:900px){main{grid-template-columns:1fr}aside{max-width:700px;width:100%;margin:auto}}
+#skip{position:fixed;top:64px;right:72px;z-index:9;display:flex;align-items:center;gap:8px;padding:8px 14px;background:rgba(0,0,0,.35);border:1px solid rgba(214,208,200,.45);color:#cfcac2;font:15px/1 'Microsoft YaHei',sans-serif;letter-spacing:2px;cursor:pointer;opacity:0;transition:opacity .6s ease;user-select:none}#skip.show{opacity:1}#skip:hover{color:#fff;border-color:#e8a33d;background:rgba(232,163,61,.12)}#skip .arr{color:#e8a33d}
+
+/* ===== 掉线彩蛋（Lead 增加） ===== */
+#egg{position:fixed;inset:0;z-index:80;display:none;overflow:hidden;background:#05070a}
+#egg.on{display:block}
+#egg-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:saturate(.85) brightness(.85)}
+#egg-veil{position:absolute;inset:0;background:rgba(6,8,12,.55);backdrop-filter:blur(3px) saturate(.85);-webkit-backdrop-filter:blur(3px) saturate(.85)}
+#egg-card{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:min(920px,86vw);background:rgba(16,18,20,.93);border:1px solid rgba(255,255,255,.08);box-shadow:0 30px 120px rgba(0,0,0,.6);padding:34px 40px 26px;font-family:'Microsoft YaHei',system-ui,sans-serif;color:#cfcfcf}
+.egg-head{display:flex;align-items:center;gap:16px;border-bottom:1px solid rgba(255,255,255,.12);padding-bottom:18px}
+.egg-badge{width:38px;height:38px;display:flex;align-items:center;justify-content:center;background:#f08a1d;color:#111;font-weight:800;font-size:26px;line-height:1}
+.egg-title{font-size:30px;letter-spacing:2px;color:#f2f2f2}
+.egg-msg{padding:30px 6px 26px;font-size:24px;line-height:1.6;color:#bdbdbd}
+.egg-code{display:flex;justify-content:space-between;align-items:center;background:rgba(120,18,14,.55);border-left:3px solid #a1331f;padding:18px 22px;color:#ff6a5a;font:600 24px/1 Consolas,'Courier New',monospace;letter-spacing:2px}
+.egg-actions{display:flex;justify-content:center;margin-top:30px;border-top:1px solid rgba(255,255,255,.12);padding-top:26px}
+#egg-retry{min-width:280px;padding:14px 26px;background:#15171a;border:1px solid rgba(255,255,255,.35);color:#e8e8e8;font-size:20px;letter-spacing:4px;cursor:pointer}
+#egg-retry:hover{border-color:#f09a2e;color:#fff;background:#1b1d21}
+body.egg-on #skip{display:none!important}
+
+/* ===== v2.16.0：登录 ID 动画（整体缩到原来的 1/3） ===== */
+#scene{transition:opacity .35s ease}
+#login{position:fixed;inset:0;z-index:70;display:none;overflow:hidden;background:radial-gradient(700px 410px at 50% 42%,#0b0a08 0%,#050505 58%,#000 100%);opacity:0;transition:opacity .35s ease;pointer-events:none}
+#login.on{display:block;opacity:1}
+.login-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(240,138,29,.055) 1px,transparent 1px),linear-gradient(90deg,rgba(240,138,29,.055) 1px,transparent 1px);background-size:48px 48px;-webkit-mask-image:radial-gradient(circle at 50% 45%,#000 0%,transparent 72%);mask-image:radial-gradient(circle at 50% 45%,#000 0%,transparent 72%);pointer-events:none}
+.login-scanlines{position:absolute;inset:0;background:repeating-linear-gradient(to bottom,rgba(0,0,0,.22) 0 1px,transparent 1px 3px);pointer-events:none;opacity:.45}
+.login-frame{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:min(500px,92vw);text-align:center;font-family:'Consolas','Courier New','Microsoft YaHei',monospace;color:#f08a1d}
+.login-frame:before,.login-frame:after{content:'';position:absolute;width:18px;height:18px;border:1px solid rgba(240,138,29,.5);pointer-events:none}
+.login-frame:before{left:-10px;top:-10px;border-right:0;border-bottom:0}
+.login-frame:after{right:-10px;bottom:-10px;border-left:0;border-top:0}
+.login-meta{display:flex;justify-content:space-between;font-size:clamp(5px,0.5vw,9px);letter-spacing:.22em;color:rgba(240,138,29,.55);text-transform:uppercase}
+.login-line1{margin:clamp(6px,1vh,13px) 0 clamp(5px,.8vh,10px);font-size:clamp(9px,1.4vw,27px);font-weight:700;letter-spacing:.03em;white-space:nowrap;color:#f7a23a;text-shadow:0 0 7px rgba(240,138,29,.3)}
+.login-line1 .l1c{display:inline-block;min-width:.32em}
+.login-line2{position:relative;height:1.5em;font-size:clamp(7px,.9vw,17.3px);letter-spacing:.02em;white-space:nowrap;color:#ffb04d;text-shadow:0 0 6px rgba(240,138,29,.3)}
+.login-l2-track{position:absolute;left:0;top:0;display:inline-flex;align-items:baseline;white-space:nowrap;will-change:transform}
+.login-l2-head{display:inline-flex;align-items:baseline}
+.login-scan-wrap{position:relative;display:inline-block;--p:0%;line-height:1}
+#login-scan-text{display:inline-block;line-height:1;-webkit-mask-image:linear-gradient(to bottom,#000 0 var(--p),transparent var(--p));mask-image:linear-gradient(to bottom,#000 0 var(--p),transparent var(--p))}
+#login-scan-bar{position:absolute;left:-3%;width:106%;height:1px;top:0;background:#ffb04d;box-shadow:0 0 5px 1px rgba(240,138,29,.85);pointer-events:none;opacity:0}
+#login-colon{opacity:0}
+#login-name{color:#f08a1d;display:inline-block;white-space:nowrap}
+.login-line2 .nmc{display:inline-block;text-align:center;vertical-align:baseline;line-height:1}
+.login-line2 .nmc.settled{color:#ffc36b}
+#login-caret{display:inline-block;width:.09em;height:.9em;background:#f08a1d;margin-left:.08em;opacity:0;transform:translateY(.08em)}
+.login-foot{margin-top:clamp(8px,1.4vh,18px);color:rgba(240,138,29,.45)}
+.login-voice-layer{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:2}
