@@ -4,7 +4,7 @@
  * values in sync with src/shared/constants.js; test/rows.test.mjs compares them.
  */
 var DBN = {
-  VERSION: '0.5.2',
+  VERSION: '0.5.3',
   ROOT_ID: 'dbn-root',
   STAGE_ID: 'dbn-stage',
   VEIL_ID: 'dbn-veil',

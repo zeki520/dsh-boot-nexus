@@ -32,6 +32,7 @@ import {
 import { CRITICAL_CSS } from './host/css.js'
 import { buildRows, contribute } from './host/rows.js'
 import { buildMediaPlan, mediaIds, mimeOf } from './host/assets.js'
+import { seedBundledMedia } from './host/seed.js'
 import { buildBootActs, buildSuitePlan, effectiveSuiteConfig, findSuitePackage, listSuiteTemplates, rewriteSplash } from './host/suite.js'
 import { createSuiteRoutes } from './host/suite-routes.js'
 import { createRoutes, createTrustFence, mountRoutes } from './host/routes.js'
@@ -182,6 +183,16 @@ export async function apply(ctx, config) {
 
   await fsp.mkdir(clipsDir, { recursive: true })
   await fsp.mkdir(saversDir, { recursive: true })
+  /**
+   * A fresh install has no media anywhere on disk, and an empty pool means no
+   * intro and no screensaver at all. The package ships a small default set
+   * under assets/media; copy it in once so the first launch already animates.
+   */
+  await seedBundledMedia({
+    bundleDir: join(packageRoot, '..', 'assets', 'media'),
+    mediaRoot,
+    log: (line) => diag(line),
+  })
 
   let state
   let configWarnings = []
