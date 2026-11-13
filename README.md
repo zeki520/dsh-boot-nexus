@@ -1,11 +1,63 @@
-# dsh-boot-nexus
+<div align="center">
 
-把 `dsh-boot-suite` 与 `dsh-boot-animation` 合并成一个开机动画插件：**一个覆盖层、一个状态机、一个时钟、一份配置、一套路由、一个设置入口。**
+<img src="docs/screenshots/brand-icon.png" width="128" height="128" alt="dsh-boot-nexus">
 
-![设置卡片](docs/screenshots/settings-card.png)
+<h1>dsh-boot-nexus</h1>
 
-> 状态：`0.5.2`。60 个单测通过；已安装到 desktop profile，suite 原版引擎与 animation 随机池均实机通过。旧插件仍保留但已禁用，删除它们不影响 nexus。`0.4.0` 加入 64/128/256 图标与设置卡图标；`0.4.1` 修复设置卡 suite 生效配置回显，manifest 图标改用 128px；`0.4.2` 在顶部设置项摘要行加 18px 小图标；`0.4.3` 新增 suite 每步自动停留（毫秒）与页面内预览；`0.4.4` 新增身份卡单独停留（`suitePopupMs`）；`0.4.5` 修复保存后 suite 字段被 POST 响应清空、预览结束后黑屏不自动退出；`0.5.0` 设置卡改版：近不透明分组面板、两列字段网格、吸顶工具条（状态/版本/保存/预览/收起）；`0.5.1` 无障碍与审查修订：93 个控件全部有可访问名称、常驻 live region、保存期间焦点不丢失、控件边界与非文本对比度达标、渲染异常有兜底卡片；`0.5.2` 工具条显示插件版本号，补齐 MIT 许可与可移植的安装校验脚本。
-> 设计与冲突分析：`docs/DESIGN.md` · 部署与验收：`docs/TEST-PLAN.md` · suite 引擎接入：`docs/SUITE-ENGINE.md`
+**开机动画、suite 两幕、屏保、素材池 —— 一个插件全搞定。**
+
+给 DeepSeek Harness 的一套开机仪式：每次启动只播一件事，所有参数都在一张卡片里改。
+
+[![version](https://img.shields.io/badge/version-0.5.2-7c8cff?style=flat-square)](package.json)
+[![license](https://img.shields.io/badge/license-MIT-3fb950?style=flat-square)](LICENSE)
+[![tests](https://img.shields.io/badge/tests-60%2F60-3fb950?style=flat-square)](#验证状态)
+[![platform](https://img.shields.io/badge/DeepSeek%20Harness-plugin-8b5cf6?style=flat-square)](https://github.com/zeki520/dsh-boot-nexus)
+
+[安装](#安装) · [它能做什么](#它能做什么) · [设置卡](#设置卡) · [配置](#配置) · [文档](#文档)
+
+<img src="docs/screenshots/settings-card.png" width="820" alt="设置卡">
+
+</div>
+
+---
+
+## 它能做什么
+
+- **一次只播一件事。** 片头、suite 两幕、屏保共用同一个根节点、同一个状态机、同一个时钟，不会出现两个插件抢同一层画面的情况。
+- **两套引擎，择一或随机。** 50% 随机在 animation 视频池与 suite 原版两幕之间轮换，也可以固定成其中任意一种。
+- **改完立刻看。** 设置卡里保存后可在页面内直接预览，不用重启；30 多个可调项覆盖时长、音量、模板、身份、BGM、转场、颜色。
+- **自包含。** suite 引擎、模板、语音与音效都随插件发布；旧插件删掉后仍然能播。
+
+---
+
+## 安装
+
+```powershell
+git clone https://github.com/zeki520/dsh-boot-nexus.git
+cd dsh-boot-nexus
+npm run build
+$v = (Get-Content package.json -Raw | ConvertFrom-Json).version
+npm pack --pack-destination "$env:USERPROFILE\dsh-plugins"
+
+dsh plugin --profile desktop remove dsh-boot-nexus
+dsh plugin --profile desktop add "file:$env:USERPROFILE/dsh-plugins/dsh-boot-nexus-$v.tgz"
+```
+
+装完完全退出并重开 DSH。首次运行会自动建好素材目录，把片头视频放进 `$DSH_HOME\boot-nexus\media\clips`、屏保放进 `...\savers`，就能在设置卡里勾选。
+
+更细的说明（同版本 tarball 复用、离线/内网安装、回滚）见文末 [安装细节](#安装细节从源码--离线)。
+
+---
+
+## 设置卡
+
+一张卡片管理全部行为，顶部工具条固定显示当前状态与版本，随时保存、预览或收起：
+
+![设置卡工具条](docs/screenshots/settings-toolbar.png)
+
+- 10 个分区、93 个控件，全部平铺，不需要二次展开；
+- 两列字段网格，窄窗口自动降为单列；
+- 所有控件有可访问名称，错误与保存状态通过 live region 播报。
 
 ---
 
@@ -49,8 +101,8 @@ dsh-boot-nexus/
     client/
       index.js              # clientReady + 单一设置卡
   scripts/build-runtime.mjs # 拼 IIFE → lib/runtime.js
-  lib/runtime.js            # 构建产物（36.8 KB）
-  test/                     # 34 个 node:test 用例
+  lib/runtime.js            # 构建产物（58.3 KB）
+  test/                     # 60 个 node:test 用例
   docs/
 ```
 
@@ -59,16 +111,15 @@ dsh-boot-nexus/
 ## 构建与测试
 
 ```powershell
-cd "F:\dsh插件工作区\dsh-boot-nexus"
 npm test
 ```
 
 期望：
 
 ```text
-runtime: 36808 bytes (ok; budget 65536, hard 98304)
-ℹ tests 34
-ℹ pass 34
+runtime: 58284 bytes (ok; budget 65536, hard 98304)
+ℹ tests 60
+ℹ pass 60
 ℹ fail 0
 ```
 
@@ -139,7 +190,7 @@ assets/suite/
 
 ---
 
-## 安装
+## 安装细节（从源码 / 离线）
 
 从源码打包：
 
@@ -232,9 +283,38 @@ suite 的两幕都由 suite 自己的 `splash.js` 负责，nexus 不会在 suite
 | 身份卡单独停留（0.4.4） | ✅ 已实现：`suitePopupMs` 只抬高 confirm 卡，其他步骤不动 |
 | 设置卡改版（0.5.0） | ✅ 1040 / 760 / 520 px 三档宽度离线渲染通过；面板恒 #1c1f24，正文 14.2:1、说明 7.3:1 |
 | 无障碍修订（0.5.1） | ✅ 93/93 控件有名称、7 个分区有 `aria-labelledby`、live region 常驻、保存中焦点不丢 |
-| 版本号显示（0.5.2） | ⏳ 待装 0.5.2 后目视确认工具条显示 `v0.5.2` |
+| 版本号显示（0.5.2） | ⏳ 0.5.2 已装（哈希与工作区一致），待重启 DSH 后目视确认工具条显示 `v0.5.2` |
 | 旧插件禁用 | ✅ 两条 insert 行均 `disabled: true` |
 | 删除旧插件后自包含（0.3.4） | ✅ 临时改名 `dsh-boot-suite` / `dsh-boot-animation` 后，vendored suite 与数据目录素材仍可用 |
+
+---
+
+## 文档
+
+| 文档 | 内容 |
+|---|---|
+| [docs/DESIGN.md](docs/DESIGN.md) | 两插件冲突分析、合并后的状态机与字段设计、迁移规则 |
+| [docs/TEST-PLAN.md](docs/TEST-PLAN.md) | 部署步骤与逐项验收清单 |
+| [docs/SUITE-ENGINE.md](docs/SUITE-ENGINE.md) | suite 原版引擎的 vendored 接入与 token 路由 |
+| [docs/screenshots](docs/screenshots) | 设置卡与工具条截图、仓库图标 |
+
+---
+
+## 版本记录
+
+当前 `0.5.2`：60 个单测通过，suite 原版引擎与 animation 随机池均实机通过；旧插件仍保留但已禁用，删除它们不影响 nexus。
+
+- `0.4.0` 加入 64/128/256 图标与设置卡图标；
+- `0.4.1` 修复设置卡 suite 生效配置回显，manifest 图标改用 128px；
+- `0.4.2` 在顶部设置项摘要行加 18px 小图标；
+- `0.4.3` 新增 suite 每步自动停留（毫秒）与页面内预览；
+- `0.4.4` 新增身份卡单独停留（`suitePopupMs`）；
+- `0.4.5` 修复保存后 suite 字段被 POST 响应清空、预览结束后黑屏不自动退出；
+- `0.5.0` 设置卡改版：近不透明分组面板、两列字段网格、吸顶工具条（状态/版本/保存/预览/收起）；
+- `0.5.1` 无障碍与审查修订：93 个控件全部有可访问名称、常驻 live region、保存期间焦点不丢失、控件边界与非文本对比度达标、渲染异常有兜底卡片；
+- `0.5.2` 工具条显示插件版本号，补齐 MIT 许可与可移植的安装校验脚本。
+
+设计与冲突分析见 [docs/DESIGN.md](docs/DESIGN.md)，部署与验收见 [docs/TEST-PLAN.md](docs/TEST-PLAN.md)，suite 引擎接入见 [docs/SUITE-ENGINE.md](docs/SUITE-ENGINE.md)。
 
 ---
 
