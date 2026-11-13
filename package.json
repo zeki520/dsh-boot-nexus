@@ -1,6 +1,6 @@
 {
   "name": "dsh-boot-nexus",
-  "version": "0.5.3",
+  "version": "0.5.4",
   "description": "Unified boot screen, wallpaper and screensaver for DeepSeek Harness — one overlay, one state machine, one config.",
   "icon": "assets/icon/icon-128.png",
   "license": "MIT",

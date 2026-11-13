@@ -8,7 +8,7 @@
 
 给 DeepSeek Harness 的一套开机仪式：每次启动只播一件事，所有参数都在一张卡片里改。
 
-[![version](https://img.shields.io/badge/version-0.5.3-7c8cff?style=flat-square)](package.json)
+[![version](https://img.shields.io/badge/version-0.5.4-7c8cff?style=flat-square)](package.json)
 [![license](https://img.shields.io/badge/license-MIT-3fb950?style=flat-square)](LICENSE)
 [![tests](https://img.shields.io/badge/tests-66%2F66-3fb950?style=flat-square)](#验证状态)
 [![platform](https://img.shields.io/badge/DeepSeek%20Harness-plugin-8b5cf6?style=flat-square)](https://github.com/zeki520/dsh-boot-nexus)
@@ -35,7 +35,7 @@
 - **两套引擎，择一或随机。** 50% 随机在 animation 视频池与 suite 原版两幕之间轮换，也可以固定成其中任意一种。
 - **改完立刻看。** 设置卡里保存后可在页面内直接预览，不用重启；30 多个可调项覆盖时长、音量、模板、身份、BGM、转场、颜色。
 - **自包含。** suite 引擎、模板、语音与音效都随插件发布；旧插件删掉后仍然能播。
-- **开箱就有画面。** 包内自带 5 段片头与 7 段屏保，首次启动自动复制到素材目录 —— 不需要你先自备视频，装完第一次开机就有动画。
+- **开箱就有画面。** 包内自带 5 段片头与 7 段屏保，**原画质**（720p–4K，共约 197 MB），首次启动自动复制到素材目录 —— 不需要你先自备视频，装完第一次开机就有动画。
 
 ---
 
@@ -52,7 +52,7 @@ dsh plugin --profile desktop remove dsh-boot-nexus
 dsh plugin --profile desktop add "file:$env:USERPROFILE/dsh-plugins/dsh-boot-nexus-$v.tgz"
 ```
 
-装完完全退出并重开 DSH。首次运行会自动建好素材目录，并把包内自带的 5 段片头、7 段屏保复制进去（`$DSH_HOME\boot-nexus\media\clips` / `...\savers`），装完即可播放；想换成自己的视频，直接往这两个目录里放文件，或在设置卡里取消勾选不想要的。
+装完完全退出并重开 DSH。首次运行会自动建好素材目录，并把包内自带的 5 段片头、7 段屏保（原画质）复制进去（`$DSH_HOME\boot-nexus\media\clips` / `...\savers`），装完即可播放；想换成自己的视频，直接往这两个目录里放文件，或在设置卡里取消勾选不想要的。
 
 更细的说明（同版本 tarball 复用、离线/内网安装、回滚）见文末 [安装细节](#安装细节从源码--离线)。
 
@@ -293,7 +293,7 @@ suite 的两幕都由 suite 自己的 `splash.js` 负责，nexus 不会在 suite
 | 设置卡改版（0.5.0） | ✅ 1040 / 760 / 520 px 三档宽度离线渲染通过；面板恒 #1c1f24，正文 14.2:1、说明 7.3:1 |
 | 无障碍修订（0.5.1） | ✅ 93/93 控件有名称、7 个分区有 `aria-labelledby`、live region 常驻、保存中焦点不丢 |
 | 版本号显示（0.5.2） | ✅ 设置卡工具条显示插件版本号 |
-| 自带素材（0.5.3） | ✅ 包内 5 段片头 / 7 段屏保；空素材目录首次启动自动播种，单测 6 例覆盖「只播一次、删除不复活、同名不覆盖」 |
+| 自带素材（0.5.3 / 0.5.4） | ✅ 包内 5 段片头 / 7 段屏保；0.5.4 换成原画质（197 MB）。空素材目录首次启动自动播种，单测 6 例覆盖「只播一次、删除不复活、同名不覆盖」 |
 | 旧插件禁用 | ✅ 两条 insert 行均 `disabled: true` |
 | 删除旧插件后自包含（0.3.4） | ✅ 临时改名 `dsh-boot-suite` / `dsh-boot-animation` 后，vendored suite 与数据目录素材仍可用 |
 
@@ -312,7 +312,7 @@ suite 的两幕都由 suite 自己的 `splash.js` 负责，nexus 不会在 suite
 
 ## 版本记录
 
-当前 `0.5.3`：66 个单测通过，suite 原版引擎与 animation 随机池均实机通过；旧插件仍保留但已禁用，删除它们不影响 nexus。
+当前 `0.5.4`：66 个单测通过，suite 原版引擎与 animation 随机池均实机通过；旧插件仍保留但已禁用，删除它们不影响 nexus。
 
 - `0.4.0` 加入 64/128/256 图标与设置卡图标；
 - `0.4.1` 修复设置卡 suite 生效配置回显，manifest 图标改用 128px；
@@ -322,6 +322,7 @@ suite 的两幕都由 suite 自己的 `splash.js` 负责，nexus 不会在 suite
 - `0.4.5` 修复保存后 suite 字段被 POST 响应清空、预览结束后黑屏不自动退出；
 - `0.5.0` 设置卡改版：近不透明分组面板、两列字段网格、吸顶工具条（状态/版本/保存/预览/收起）；
 - `0.5.1` 无障碍与审查修订：93 个控件全部有可访问名称、常驻 live region、保存期间焦点不丢失、控件边界与非文本对比度达标、渲染异常有兜底卡片；
+- `0.5.4` 自带素材改为原画质：不再转码，直接打包 720p / 1440p / 4K 原片（197 MB，安装包约 256 MB）。
 - `0.5.3` 包内自带默认素材：5 段片头 + 7 段屏保（720p / 1080p，共约 42 MB），首次启动复制到素材目录并写入 `.bundled-media.json` 标记，之后不再重复播种、也不复活用户手动删掉的文件。
 - `0.5.2` 工具条显示插件版本号，补齐 MIT 许可与可移植的安装校验脚本。
 
