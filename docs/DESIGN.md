@@ -4,6 +4,7 @@
 > 状态：**评审稿，未安装、未替换、未修改 `dsh-boot-suite` / `dsh-boot-animation` 本体。**
 > 工作区：`F:\dsh插件工作区\dsh-boot-nexus`
 > 目标宿主：DSH desktop profile（Electron 44 / Node 24.21），同时兼容 Web profile。
+> 致谢：本文讨论的两套引擎分别来自 [lxj5820/dsh-boot-animation](https://github.com/lxj5820/dsh-boot-animation) 与 [LeeRolling/dsh-boot-suite](https://github.com/LeeRolling/dsh-boot-suite)，均为作者开源；若你在用 nexus，请先去给这两个仓库点 ⭐。
 
 ---
 
