@@ -13,11 +13,19 @@
 [![tests](https://img.shields.io/badge/tests-60%2F60-3fb950?style=flat-square)](#验证状态)
 [![platform](https://img.shields.io/badge/DeepSeek%20Harness-plugin-8b5cf6?style=flat-square)](https://github.com/zeki520/dsh-boot-nexus)
 
-[安装](#安装) · [它能做什么](#它能做什么) · [设置卡](#设置卡) · [配置](#配置) · [文档](#文档)
+[安装](#安装) · [它能做什么](#它能做什么) · [设置卡](#设置卡) · [配置](#配置) · [文档](#文档) · [致谢](#致谢)
 
 <img src="docs/screenshots/settings-card.png" width="820" alt="设置卡">
 
 </div>
+
+---
+
+## 致谢
+
+这个插件不是从零写出来的。开机视频的全窗口播放与淡出衔接来自 **[lxj5820/dsh-boot-animation](https://github.com/lxj5820/dsh-boot-animation)**；suite 六幕引擎、模板、语音与音效体系来自 **[LeeRolling/dsh-boot-suite](https://github.com/LeeRolling/dsh-boot-suite)**。两位作者都选择了开源，nexus 才有东西可以合并。
+
+**如果你喜欢这套开机动画，请先去给原作者点 ⭐：** [lxj5820/dsh-boot-animation](https://github.com/lxj5820/dsh-boot-animation) · [LeeRolling/dsh-boot-suite](https://github.com/LeeRolling/dsh-boot-suite)。完整说明见文末[致谢与来源](#致谢与来源)。
 
 ---
 
@@ -315,6 +323,24 @@ suite 的两幕都由 suite 自己的 `splash.js` 负责，nexus 不会在 suite
 - `0.5.2` 工具条显示插件版本号，补齐 MIT 许可与可移植的安装校验脚本。
 
 设计与冲突分析见 [docs/DESIGN.md](docs/DESIGN.md)，部署与验收见 [docs/TEST-PLAN.md](docs/TEST-PLAN.md)，suite 引擎接入见 [docs/SUITE-ENGINE.md](docs/SUITE-ENGINE.md)。
+
+---
+
+## 致谢与来源
+
+nexus 的每一帧画面，几乎都能追到这两个仓库：
+
+| 项目 | 作者 | 这里用到了什么 | Star |
+|---|---|---|---|
+| [dsh-boot-animation](https://github.com/lxj5820/dsh-boot-animation) | **lxj5820** | 全窗口视频片头、播完淡出交还应用、素材池与随机选片 | [⭐ 去点](https://github.com/lxj5820/dsh-boot-animation) |
+| [dsh-boot-suite](https://github.com/LeeRolling/dsh-boot-suite) | **LeeRolling** | 六幕冷启动引擎、模板 / 语音 / 音效、设置卡与身份卡 | [⭐ 去点](https://github.com/LeeRolling/dsh-boot-suite) |
+
+nexus 做的是把它们合到同一层画面里：一个根节点、一个状态机、一个时钟、一份配置、一张设置卡。**引擎、素材与设计思路都来自上面两位作者的开源工作**，遇到播放问题也请先看原仓库的文档与 issue。
+
+如果这个插件帮你省了事，请把 ⭐ 点给源头：
+
+- ⭐ [lxj5820/dsh-boot-animation](https://github.com/lxj5820/dsh-boot-animation)
+- ⭐ [LeeRolling/dsh-boot-suite](https://github.com/LeeRolling/dsh-boot-suite)
 
 ---
 
