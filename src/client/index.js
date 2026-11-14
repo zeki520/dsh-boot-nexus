@@ -1053,7 +1053,7 @@ window.__ModuleLoader__.load({
               suiteNumber('音量', 'voiceVolume', 0, 1, 0.01, ''),
               suiteSwitch('念台词前轻提示', 'voiceCue'),
               suiteSelect('语音来源', 'voiceSource', [['asset', '真声素材（asset）'], ['tts', 'TTS（tts）']], ''),
-              suiteSelect('配音音色包', 'voicePack', [['f', '英文 F'], ['g', '英文 G'], ['h', '英文 H'], ['i', '中文 I'], ['j', '中文 J'], ['k', '中文 K']], ''),
+              suiteSelect('配音音色包', 'voicePack', [['f', '英文 F（默认）'], ['g', '日文 1'], ['h', '日文 2'], ['i', '日文 3'], ['j', '日文 4'], ['k', '日文 5']], ''),
               suiteSelect('声音效果', 'voiceFx', [['none', '无'], ['ai-mech', 'AI 机械'], ['robot', '机器人'], ['radio', '电台'], ['oldtv', '老电视'], ['dark', '低沉']], ''),
               suiteNumber('提示音后留白 (ms)', 'voiceLead', 0, 2000, 10, ''),
               suiteNumber('终幕欢迎延迟 (ms)', 'welcomeDelay', 0, 3000, 10, ''),

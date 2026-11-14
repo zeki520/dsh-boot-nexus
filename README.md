@@ -8,7 +8,7 @@
 
 给 DeepSeek Harness 的一套开机仪式：每次启动只播一件事，所有参数都在一张卡片里改。
 
-[![version](https://img.shields.io/badge/version-0.5.4-7c8cff?style=flat-square)](package.json)
+[![version](https://img.shields.io/badge/version-0.5.5-7c8cff?style=flat-square)](package.json)
 [![license](https://img.shields.io/badge/license-MIT-3fb950?style=flat-square)](LICENSE)
 [![tests](https://img.shields.io/badge/tests-66%2F66-3fb950?style=flat-square)](#验证状态)
 [![platform](https://img.shields.io/badge/DeepSeek%20Harness-plugin-8b5cf6?style=flat-square)](https://github.com/zeki520/dsh-boot-nexus)
@@ -312,7 +312,7 @@ suite 的两幕都由 suite 自己的 `splash.js` 负责，nexus 不会在 suite
 
 ## 版本记录
 
-当前 `0.5.4`：66 个单测通过，suite 原版引擎与 animation 随机池均实机通过；旧插件仍保留但已禁用，删除它们不影响 nexus。
+当前 `0.5.5`：67 个单测通过，suite 原版引擎与 animation 随机池均实机通过；旧插件仍保留但已禁用，删除它们不影响 nexus。
 
 - `0.4.0` 加入 64/128/256 图标与设置卡图标；
 - `0.4.1` 修复设置卡 suite 生效配置回显，manifest 图标改用 128px；
@@ -322,6 +322,7 @@ suite 的两幕都由 suite 自己的 `splash.js` 负责，nexus 不会在 suite
 - `0.4.5` 修复保存后 suite 字段被 POST 响应清空、预览结束后黑屏不自动退出；
 - `0.5.0` 设置卡改版：近不透明分组面板、两列字段网格、吸顶工具条（状态/版本/保存/预览/收起）；
 - `0.5.1` 无障碍与审查修订：93 个控件全部有可访问名称、常驻 live region、保存期间焦点不丢失、控件边界与非文本对比度达标、渲染异常有兜底卡片；
+- `0.5.5` 修复新装用户 suite 六幕无人声：默认 `voicePack` 落在不存在的 `a` 包（路由 404），现在统一归一化为随包发布的 `f`；卡片里的音色选项标签同时改为「英文 F（默认）/ 日文 1–5」。
 - `0.5.4` 自带素材改为原画质：不再转码，直接打包 720p / 1440p / 4K 原片（197 MB，安装包约 256 MB）。
 - `0.5.3` 包内自带默认素材：5 段片头 + 7 段屏保（720p / 1080p，共约 42 MB），首次启动复制到素材目录并写入 `.bundled-media.json` 标记，之后不再重复播种、也不复活用户手动删掉的文件。
 - `0.5.2` 工具条显示插件版本号，补齐 MIT 许可与可移植的安装校验脚本。

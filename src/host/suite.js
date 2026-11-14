@@ -83,6 +83,20 @@ export function loadTemplate(id, { home, suiteRoot }) {
   return null
 }
 
+/**
+ * Voice packs shipped in assets/suite/lib/assets/voices (see manifest.json):
+ * f is the English default, g..k are Japanese. splash.js falls back to the
+ * literal 'a' when voicePack is unset, and no such pack ships — the frame then
+ * requests /suite/<token>/voice/a/line-1.mp3 and the route answers 404, so a
+ * fresh install plays the six acts silently. Normalise here so every plan
+ * carries a pack that actually exists.
+ */
+export function normalizeVoicePack(value) {
+  const pack = typeof value === 'string' ? value.trim() : ''
+  if (pack === 'builtin') return 'f'
+  return /^[f-k]$/.test(pack) ? pack : 'f'
+}
+
 /** The subset of suite settings nexus is willing to carry into the frame. */
 export function projectSuiteConfig(raw) {
   const source = raw && typeof raw === 'object' ? raw : {}
@@ -105,6 +119,7 @@ export function projectSuiteConfig(raw) {
   for (const key of keys) {
     if (source[key] !== undefined) out[key] = source[key]
   }
+  out.voicePack = normalizeVoicePack(source.voicePack)
   return out
 }
 

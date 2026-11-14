@@ -90,6 +90,17 @@ test('suite projection keeps sfx so the settings card can round-trip it', () => 
   assert.equal('noise' in projected, false)
 })
 
+test('voicePack always projects to a pack that ships, so a fresh install is not silent', () => {
+  // splash.js falls back to 'a' when the key is missing, and no 'a' pack exists.
+  assert.equal(projectSuiteConfig({}).voicePack, 'f')
+  assert.equal(projectSuiteConfig({ voicePack: 'builtin' }).voicePack, 'f')
+  assert.equal(projectSuiteConfig({ voicePack: 'a' }).voicePack, 'f')
+  assert.equal(projectSuiteConfig({ voicePack: 'zzz' }).voicePack, 'f')
+  assert.equal(projectSuiteConfig({ voicePack: '  ' }).voicePack, 'f')
+  assert.equal(projectSuiteConfig({ voicePack: 'k' }).voicePack, 'k')
+  assert.equal(projectSuiteConfig({ voicePack: 'g' }).voicePack, 'g')
+})
+
 test('nexus suite overrides win over the legacy suite config', { skip: !available && 'suite not installed' }, () => {
   const built = plan({
     act2Ms: 0,
