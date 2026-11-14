@@ -1,0 +1,64 @@
+{
+  "schemaVersion": 1,
+  "id": "custom-mw4issgp",
+  "name": "1",
+  "author": "用户导入",
+  "homepage": "",
+  "license": "",
+  "version": "1.0.0",
+  "description": "用户导入的自定义动画（仅本机，不上传）",
+  "tags": [
+    "custom",
+    "video"
+  ],
+  "duration": 8064,
+  "segments": [
+    {
+      "name": "1",
+      "from": 0,
+      "to": 8064
+    }
+  ],
+  "layers": [
+    {
+      "id": "bg",
+      "type": "panel",
+      "pos": [
+        640,
+        360
+      ],
+      "panelW": 1280,
+      "panelH": 720,
+      "fill": "#000000",
+      "radius": 0,
+      "keyframes": [
+        {
+          "t": 0,
+          "opacity": 1
+        }
+      ]
+    },
+    {
+      "id": "media",
+      "type": "video",
+      "pos": [
+        640,
+        360
+      ],
+      "videoW": 1280,
+      "videoH": 720,
+      "src": "import-mw4issgp.mp4",
+      "keyframes": [
+        {
+          "t": 0,
+          "opacity": 1
+        },
+        {
+          "t": 8064,
+          "opacity": 1
+        }
+      ]
+    }
+  ],
+  "effects": []
+}
