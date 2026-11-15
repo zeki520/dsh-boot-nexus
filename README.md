@@ -8,7 +8,7 @@
 
 给 DeepSeek Harness 的一套开机仪式：每次启动只播一件事，所有参数都在一张卡片里改。
 
-[![version](https://img.shields.io/badge/version-0.6.0-7c8cff?style=flat-square)](package.json)
+[![version](https://img.shields.io/badge/version-0.6.1-7c8cff?style=flat-square)](package.json)
 [![license](https://img.shields.io/badge/license-MIT-3fb950?style=flat-square)](LICENSE)
 [![tests](https://img.shields.io/badge/tests-67%2F67-3fb950?style=flat-square)](#验证状态)
 [![platform](https://img.shields.io/badge/DeepSeek%20Harness-plugin-8b5cf6?style=flat-square)](https://github.com/zeki520/dsh-boot-nexus)
@@ -315,8 +315,9 @@ suite 的两幕都由 suite 自己的 `splash.js` 负责，nexus 不会在 suite
 
 ## 版本记录
 
-当前 `0.6.0`：67 个单测通过，suite 原版引擎与 animation 随机池均实机通过；旧插件仍保留但已禁用，删除它们不影响 nexus。
+当前 `0.6.1`：68 个单测通过，suite 原版引擎与 animation 随机池均实机通过；旧插件仍保留但已禁用，删除它们不影响 nexus。
 
+- `0.6.1` 配音统一为机械音：`voiceFx` 缺省、空串与未知值都归一到 `robot`，新装用户与从旧 `dsh-boot-suite` 迁移过来的机器听起来一致；想关掉可在设置卡「语音与音效 → 声音效果」选「无」；
 - `0.6.0` 设置卡视觉重构：深空玻璃面板与卡片化分区、开关式 checkbox、圆润 chevron 下拉、光晕滑杆与聚焦发光；表面色全部由 `color-mix` 从前景色派生，不再猜测宿主主题；
 - `0.5.5` 修复新装用户 suite 六幕无人声：默认 `voicePack` 落在不存在的 `a` 包（路由 404），现在统一归一化为随包发布的 `f`；卡片里的音色选项标签同时改为「英文 F（默认）/ 日文 1–5」；
 - `0.5.4` 自带素材改为原画质：不再转码，直接打包 720p / 1440p / 4K 原片（197 MB，安装包约 256 MB）；
