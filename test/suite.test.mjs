@@ -101,6 +101,18 @@ test('voicePack always projects to a pack that ships, so a fresh install is not 
   assert.equal(projectSuiteConfig({ voicePack: 'g' }).voicePack, 'g')
 })
 
+test('voiceFx defaults to the mechanical preset so every install sounds the same', () => {
+  // 迁移过来的旧配置才带 robot；新装用户没有这个键，之前会落到引擎默认的 none。
+  assert.equal(projectSuiteConfig({}).voiceFx, 'robot')
+  assert.equal(projectSuiteConfig({ voiceFx: '' }).voiceFx, 'robot')
+  assert.equal(projectSuiteConfig({ voiceFx: '  ' }).voiceFx, 'robot')
+  assert.equal(projectSuiteConfig({ voiceFx: 'ROBOT' }).voiceFx, 'robot')
+  assert.equal(projectSuiteConfig({ voiceFx: 'nonsense' }).voiceFx, 'robot')
+  assert.equal(projectSuiteConfig({ voiceFx: 'none' }).voiceFx, 'none')
+  assert.equal(projectSuiteConfig({ voiceFx: 'ai-mech' }).voiceFx, 'ai-mech')
+  assert.equal(projectSuiteConfig({ voiceFx: 'oldtv' }).voiceFx, 'oldtv')
+})
+
 test('nexus suite overrides win over the legacy suite config', { skip: !available && 'suite not installed' }, () => {
   const built = plan({
     act2Ms: 0,

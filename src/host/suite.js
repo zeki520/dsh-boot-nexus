@@ -97,6 +97,14 @@ export function normalizeVoicePack(value) {
   return /^[f-k]$/.test(pack) ? pack : 'f'
 }
 
+/** 配音效果：与 splash.js 的 VOICE_FX_PRESETS 同名；缺省与未知值都回落到 robot（机械音）。 */
+export const VOICE_FX_PRESETS = ['none', 'ai-mech', 'robot', 'radio', 'oldtv', 'dark']
+
+export function normalizeVoiceFx(value) {
+  const fx = typeof value === 'string' ? value.trim().toLowerCase() : ''
+  return VOICE_FX_PRESETS.indexOf(fx) >= 0 ? fx : 'robot'
+}
+
 /** The subset of suite settings nexus is willing to carry into the frame. */
 export function projectSuiteConfig(raw) {
   const source = raw && typeof raw === 'object' ? raw : {}
@@ -120,6 +128,7 @@ export function projectSuiteConfig(raw) {
     if (source[key] !== undefined) out[key] = source[key]
   }
   out.voicePack = normalizeVoicePack(source.voicePack)
+  out.voiceFx = normalizeVoiceFx(source.voiceFx)
   return out
 }
 

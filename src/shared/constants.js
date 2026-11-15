@@ -8,7 +8,7 @@
  */
 
 export const PLUGIN_NAME = 'dsh-boot-nexus'
-export const PLUGIN_VERSION = '0.6.0'
+export const PLUGIN_VERSION = '0.6.1'
 
 /** The one settings namespace and route root. Both equal the patch id. */
 export const NAMESPACE = 'boot-nexus'
