@@ -8,7 +8,7 @@
 
 给 DeepSeek Harness 的一套开机仪式：每次启动只播一件事，所有参数都在一张卡片里改。
 
-[![version](https://img.shields.io/badge/version-0.5.5-7c8cff?style=flat-square)](package.json)
+[![version](https://img.shields.io/badge/version-0.6.0-7c8cff?style=flat-square)](package.json)
 [![license](https://img.shields.io/badge/license-MIT-3fb950?style=flat-square)](LICENSE)
 [![tests](https://img.shields.io/badge/tests-67%2F67-3fb950?style=flat-square)](#验证状态)
 [![platform](https://img.shields.io/badge/DeepSeek%20Harness-plugin-8b5cf6?style=flat-square)](https://github.com/zeki520/dsh-boot-nexus)
@@ -66,7 +66,10 @@ dsh plugin --profile desktop add "file:$env:USERPROFILE/dsh-plugins/dsh-boot-nex
 
 - 10 个分区、93 个控件，全部平铺，不需要二次展开；
 - 两列字段网格，窄窗口自动降为单列；
-- 所有控件有可访问名称，错误与保存状态通过 live region 播报。
+- 分区做成卡片：卡头带小图标与发光线，卡片之间共边，整块读作一张玻璃面；
+- 开关、下拉、滑杆、输入框全部重绘：开关带青色发光，滑杆显示已填充比例，聚焦时描边点亮；
+- 所有控件有可访问名称，错误与保存状态通过 live region 播报；
+- 表面色由 `color-mix` 从前景色派生，深色/浅色宿主自适应，不依赖 `color-scheme` 探测。
 
 ---
 
@@ -312,8 +315,9 @@ suite 的两幕都由 suite 自己的 `splash.js` 负责，nexus 不会在 suite
 
 ## 版本记录
 
-当前 `0.5.5`：67 个单测通过，suite 原版引擎与 animation 随机池均实机通过；旧插件仍保留但已禁用，删除它们不影响 nexus。
+当前 `0.6.0`：67 个单测通过，suite 原版引擎与 animation 随机池均实机通过；旧插件仍保留但已禁用，删除它们不影响 nexus。
 
+- `0.6.0` 设置卡视觉重构：深空玻璃面板与卡片化分区、开关式 checkbox、圆润 chevron 下拉、光晕滑杆与聚焦发光；表面色全部由 `color-mix` 从前景色派生，不再猜测宿主主题；
 - `0.5.5` 修复新装用户 suite 六幕无人声：默认 `voicePack` 落在不存在的 `a` 包（路由 404），现在统一归一化为随包发布的 `f`；卡片里的音色选项标签同时改为「英文 F（默认）/ 日文 1–5」；
 - `0.5.4` 自带素材改为原画质：不再转码，直接打包 720p / 1440p / 4K 原片（197 MB，安装包约 256 MB）；
 - `0.5.3` 包内自带默认素材：5 段片头 + 7 段屏保（720p / 1080p，共约 42 MB），首次启动复制到素材目录并写入 `.bundled-media.json` 标记，之后不再重复播种、也不复活用户手动删掉的文件；
