@@ -141,37 +141,51 @@ window.__ModuleLoader__.load({
      * secondary text at roughly 1.3:1 on a bright wallpaper. 96% keeps the
      * wallpaper as a tint without eating the label contrast.
      * ------------------------------------------------------------------ */
-    var CFG_CSS = `
-.dbn-cfg {
-  --dbn-fg: var(--dsw-alias-label-primary, #f3f4f6);
+    var CFG_CSS = `.dbn-cfg {
+  /* ---- palette: host tokens first, dark fallbacks second ---- */
+  --dbn-fg: var(--dsw-alias-label-primary, #e8edf5);
   --dbn-fg2: var(--dsw-alias-label-secondary, #b7bdc6);
-  --dbn-line: var(--dsw-alias-border-l1, rgba(255, 255, 255, .08));
-  --dbn-line2: var(--dsw-alias-border-l2, rgba(255, 255, 255, .14));
-  --dbn-line3: var(--dsw-alias-border-l3, rgba(255, 255, 255, .22));
+  --dbn-line: var(--dsw-alias-border-l1, color-mix(in srgb, var(--dbn-fg) 10%, transparent));
+  --dbn-line2: var(--dsw-alias-border-l2, color-mix(in srgb, var(--dbn-fg) 16%, transparent));
+  --dbn-line3: var(--dsw-alias-border-l3, color-mix(in srgb, var(--dbn-fg) 24%, transparent));
   /* Control boundaries are UI components, not hairlines: WCAG 2.2 1.4.11
      asks for 3:1 against the panel. border-l4 is the host's strongest
-     border; the fallback mirrors it per colour scheme. */
-  --dbn-ctl-line: var(--dsw-alias-border-l4, light-dark(rgba(0, 0, 0, .34), rgba(255, 255, 255, .34)));
-  --dbn-fill: var(--dsw-specific-input-major, rgba(255, 255, 255, .045));
+     border; the fallback is mixed from the foreground so it adapts to both
+     a dark and a light host without knowing which one we are on. */
+  --dbn-ctl-line: var(--dsw-alias-border-l4, color-mix(in srgb, var(--dbn-fg) 34%, transparent));
   --dbn-panel: var(--dsw-alias-bg-layer-1, #16171a);
-  --dbn-hover: var(--dsw-alias-interactive-bg-hover, rgba(255, 255, 255, .07));
-  --dbn-accent: var(--dsw-alias-state-business-primary, #7aa7ff);
+  /* Surface tints come from the foreground, never from hard white: on a
+     light host a white 4% wash is invisible, on a dark one it reads right. */
+  --dbn-fill: color-mix(in srgb, var(--dbn-fg) 7%, var(--dbn-panel));
+  --dbn-card: color-mix(in srgb, var(--dbn-fg) 2.2%, transparent);
+  --dbn-card-hi: color-mix(in srgb, var(--dbn-fg) 3.6%, transparent);
+  --dbn-fg3: color-mix(in srgb, var(--dbn-fg2) 76%, var(--dbn-panel));
+  --dbn-hover: var(--dsw-alias-interactive-bg-hover, color-mix(in srgb, var(--dbn-fg) 8%, transparent));
+  /* Accent: cyan pulled 28% towards the foreground, so it stays bright on a
+     dark host and darkens enough to stay readable on a light one. */
+  --dbn-acc: color-mix(in srgb, #22d3ee 72%, var(--dbn-fg));
+  --dbn-acc2: color-mix(in srgb, #6d9cff 72%, var(--dbn-fg));
+  --dbn-acc-soft: color-mix(in srgb, var(--dbn-acc) 20%, transparent);
+  --dbn-acc-line: color-mix(in srgb, var(--dbn-acc) 58%, transparent);
   --dbn-on: var(--dsw-alias-state-success-primary, #43c98a);
   --dbn-warn: var(--dsw-alias-state-warn-primary, #e3b341);
   --dbn-error: var(--dsw-alias-state-error-primary, #ff7b72);
   --dbn-hair: var(--dsh-hairline-width, 1px);
+  --dbn-radius: 14px;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
   min-width: 0;
   margin: 2px 0 0;
   border: var(--dbn-hair) solid var(--dbn-line2);
-  border-radius: var(--dsw-radius-lg, 16px);
+  border-radius: 18px;
   background: var(--dbn-panel);
-  background: color-mix(in srgb, var(--dbn-panel) 96%, transparent);
+  background: linear-gradient(180deg,
+    color-mix(in srgb, var(--dbn-panel) 96%, var(--dbn-fg) 4%),
+    var(--dbn-panel));
   box-shadow: 0 18px 48px rgba(0, 0, 0, .28), 0 1px 0 rgba(255, 255, 255, .05) inset;
-  -webkit-backdrop-filter: blur(30px) saturate(1.15);
-  backdrop-filter: blur(30px) saturate(1.15);
+  -webkit-backdrop-filter: blur(26px) saturate(1.25);
+  backdrop-filter: blur(26px) saturate(1.25);
   color: var(--dbn-fg);
   font-family: var(--dsw-font-family, -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", sans-serif);
   font-size: 13px;
@@ -192,17 +206,17 @@ window.__ModuleLoader__.load({
   gap: 8px;
   padding: 12px 16px;
   border-bottom: var(--dbn-hair) solid var(--dbn-line);
-  border-radius: 16px 16px 0 0;
+  border-radius: 18px 18px 0 0;
   background: var(--dbn-panel);
-  background: color-mix(in srgb, var(--dbn-panel) 97%, transparent);
-  -webkit-backdrop-filter: blur(30px) saturate(1.15);
-  backdrop-filter: blur(30px) saturate(1.15);
+  background: color-mix(in srgb, var(--dbn-panel) 72%, transparent);
+  -webkit-backdrop-filter: blur(26px) saturate(1.25);
+  backdrop-filter: blur(26px) saturate(1.25);
 }
 /* Collapsed: the bar is the whole card, so it owns both corners. :has keeps
    the rule independent of the (always mounted) #dbn-cfg-body wrapper. */
 .dbn-cfg:not(:has(.dbn-cfg-body)) .dbn-cfg-bar {
   border-bottom: 0;
-  border-radius: var(--dsw-radius-lg, 16px);
+  border-radius: 18px;
 }
 /* Visually hidden, still announced: live regions must exist before the text
    they announce, otherwise status changes are silently dropped. */
@@ -250,7 +264,7 @@ window.__ModuleLoader__.load({
   font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
   font-size: 11px;
   letter-spacing: .02em;
-  color: var(--dbn-fg2);
+  color: var(--dbn-fg3);
   font-variant-numeric: tabular-nums;
 }
 .dbn-cfg-spacer { flex: 1 1 auto; min-width: 4px; }
@@ -259,30 +273,31 @@ window.__ModuleLoader__.load({
   align-items: center;
   justify-content: center;
   gap: 6px;
-  height: 30px;
-  padding: 0 12px;
-  border: var(--dbn-hair) solid var(--dbn-line2);
-  border-radius: 8px;
+  height: 32px;
+  padding: 0 13px;
+  border: var(--dbn-hair) solid var(--dbn-ctl-line);
+  border-radius: 9px;
   background: var(--dbn-fill);
   color: var(--dbn-fg);
   font: inherit;
   font-size: 12.5px;
   white-space: nowrap;
   cursor: pointer;
-  transition: background-color .12s ease, border-color .12s ease, color .12s ease;
+  transition: border-color .16s ease, box-shadow .16s ease, color .16s ease;
 }
-.dbn-cfg-btn:hover:not(:disabled):not([aria-disabled="true"]) { background: var(--dbn-hover); border-color: var(--dbn-line3); }
+.dbn-cfg-btn:hover:not(:disabled):not([aria-disabled="true"]) { border-color: var(--dbn-acc-line); }
 .dbn-cfg-btn:disabled,
 .dbn-cfg-btn[aria-disabled="true"] { opacity: .55; cursor: default; }
 .dbn-cfg-btn--primary {
-  color: var(--dbn-accent);
-  border-color: color-mix(in srgb, var(--dbn-accent) 42%, transparent);
-  background: color-mix(in srgb, var(--dbn-accent) 14%, transparent);
+  color: var(--dbn-acc);
+  border-color: var(--dbn-acc-line);
+  background: var(--dbn-acc-soft);
   font-weight: 600;
+  box-shadow: 0 0 14px rgba(34, 211, 238, .12);
 }
 .dbn-cfg-btn--primary:hover:not(:disabled) {
-  background: color-mix(in srgb, var(--dbn-accent) 22%, transparent);
-  border-color: color-mix(in srgb, var(--dbn-accent) 55%, transparent);
+  border-color: var(--dbn-acc);
+  box-shadow: 0 0 0 3px rgba(34, 211, 238, .14), 0 0 18px rgba(34, 211, 238, .22);
 }
 .dbn-cfg-btn--ghost {
   padding: 0 8px;
@@ -291,6 +306,7 @@ window.__ModuleLoader__.load({
   color: var(--dbn-fg2);
 }
 .dbn-cfg-btn--ghost:hover:not(:disabled) { color: var(--dbn-fg); border-color: transparent; }
+/* Toolbar caret (pure decoration, marked aria-hidden in the markup). */
 .dbn-cfg-chev {
   width: 0;
   height: 0;
@@ -307,89 +323,117 @@ window.__ModuleLoader__.load({
 .dbn-cfg-body {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 0;
   padding: 14px 16px 16px;
 }
 .dbn-cfg-note {
   margin: 0;
   font-size: 12px;
   line-height: 18px;
-  color: var(--dbn-fg2);
+  color: var(--dbn-fg3);
 }
 .dbn-cfg-note[data-tone="ok"] { color: var(--dbn-on); }
 .dbn-cfg-note[data-tone="warn"] { color: var(--dbn-warn); }
 .dbn-cfg-note[data-tone="error"] { color: var(--dbn-error); }
 .dbn-cfg-loading { padding: 14px 16px 16px; }
 
-/* ---- groups -------------------------------------------------------- */
+/* ---- cards: joined into one continuous glass sheet ------------------ */
 .dbn-cfg-sec {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+  display: block;
   min-width: 0;
 }
-.dbn-cfg-sec + .dbn-cfg-sec {
-  padding-top: 16px;
-  border-top: var(--dbn-hair) solid var(--dbn-line3);
+.dbn-cfg-body > .dbn-cfg-sec + .dbn-cfg-sec { margin-top: -1px; }
+.dbn-cfg-card {
+  position: relative;
+  padding: 15px 16px 16px;
+  border: var(--dbn-hair) solid var(--dbn-line);
+  border-radius: 0;
+  background:
+    radial-gradient(240px 170px at -40px -60px, var(--dbn-acc-soft), transparent 72%),
+    linear-gradient(180deg, var(--dbn-card-hi), var(--dbn-card) 38%, transparent);
+  /* No overflow:hidden and no per-card backdrop-filter: both make Chromium
+     paint native inputs/selects with the UA theme instead of our colours. */
 }
-.dbn-cfg-title {
+.dbn-cfg-body > .dbn-cfg-sec:first-of-type .dbn-cfg-card { border-radius: var(--dbn-radius) var(--dbn-radius) 0 0; }
+.dbn-cfg-body > .dbn-cfg-sec:last-of-type .dbn-cfg-card { border-radius: 0 0 var(--dbn-radius) var(--dbn-radius); }
+.dbn-cfg-body > .dbn-cfg-sec:only-of-type .dbn-cfg-card { border-radius: var(--dbn-radius); }
+.dbn-cfg-body > .dbn-cfg-sec + .dbn-cfg-sec .dbn-cfg-card { border-top-color: var(--dbn-line); }
+/* Only the top edge of the whole sheet glows; the seams stay calm. */
+.dbn-cfg-body > .dbn-cfg-sec:first-of-type .dbn-cfg-card::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--dbn-acc-line) 22%, rgba(109, 156, 255, .38) 62%, transparent);
+  pointer-events: none;
+}
+.dbn-cfg-card-head {
   display: flex;
   align-items: center;
   gap: 8px;
+  margin: 0 0 13px;
+}
+.dbn-cfg-card-head::after {
+  content: "";
+  flex: 1 1 auto;
+  height: 1px;
+  background: linear-gradient(90deg, var(--dbn-line2), transparent);
+}
+.dbn-cfg-card-ico { width: 16px; height: 16px; flex: none; color: var(--dbn-acc); filter: drop-shadow(0 0 6px var(--dbn-acc-soft)); }
+.dbn-cfg-title {
   margin: 0;
-  font-size: 14px;
+  font-size: 13px;
+  line-height: 18px;
   font-weight: 600;
-  line-height: 20px;
+  letter-spacing: .02em;
   color: var(--dbn-fg);
 }
-.dbn-cfg-title::before {
-  content: "";
-  width: 3px;
-  height: 13px;
-  flex: none;
-  border-radius: 999px;
-  background: var(--dbn-accent);
-}
 .dbn-cfg-sub {
-  grid-column: 1 / -1;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
+  display: block;
   min-width: 0;
+  margin-top: 16px;
 }
+.dbn-cfg-sub:first-of-type { margin-top: 2px; }
 .dbn-cfg-subtitle {
-  margin: 0;
-  padding-bottom: 7px;
-  border-bottom: var(--dbn-hair) solid var(--dbn-line2);
+  margin: 0 0 8px;
+  padding-bottom: 6px;
+  border-bottom: var(--dbn-hair) solid var(--dbn-line);
   font-size: 12.5px;
+  line-height: 18px;
   font-weight: 600;
-  line-height: 17px;
   letter-spacing: .02em;
   color: var(--dbn-fg2);
 }
+
+/* ---- field grid ---------------------------------------------------- */
 .dbn-cfg-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 8px 26px;
-  min-width: 0;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  column-gap: 40px;
+  row-gap: 12px;
+  align-items: start;
 }
 .dbn-cfg-grid--stack { grid-template-columns: minmax(0, 1fr); }
-
-/* ---- one setting --------------------------------------------------- */
 .dbn-cfg-field {
   display: grid;
-  grid-template-columns: 128px minmax(0, 1fr);
+  grid-template-columns: 132px minmax(0, 1fr);
   column-gap: 12px;
-  row-gap: 2px;
+  row-gap: 3px;
   align-items: start;
   min-width: 0;
-  padding: 2px 0;
+  padding: 3px 0;
+  border-radius: 10px;
+  transition: background-color .16s ease;
 }
+.dbn-cfg-field:focus-within { background: var(--dbn-acc-soft); }
 .dbn-cfg-label {
   grid-column: 1;
-  padding-top: 6px;
+  display: flex;
+  align-items: center;
+  min-height: 34px;
   font-size: 12.5px;
   line-height: 18px;
+  font-weight: 450;
   color: var(--dbn-fg);
   word-break: break-word;
 }
@@ -397,102 +441,180 @@ window.__ModuleLoader__.load({
   grid-column: 2;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   min-width: 0;
-  min-height: 30px;
+  min-height: 34px;
 }
 .dbn-cfg-hint {
   grid-column: 2;
   margin: 0;
   font-size: 11.5px;
   line-height: 16px;
-  color: var(--dbn-fg2);
+  color: var(--dbn-fg3);
 }
 .dbn-cfg-span { grid-column: 1 / -1; min-width: 0; }
 
+/* ---- controls ------------------------------------------------------ */
 .dbn-cfg-input,
 .dbn-cfg-select {
   width: 100%;
   min-width: 0;
-  height: 30px;
-  padding: 0 10px;
+  height: 34px;
+  padding: 0 12px;
   border: var(--dbn-hair) solid var(--dbn-ctl-line);
-  border-radius: 8px;
+  border-radius: 9px;
   background-color: var(--dbn-fill);
   color: var(--dbn-fg);
   font: inherit;
   font-size: 12.5px;
-  transition: background-color .12s ease, border-color .12s ease;
+  font-variant-numeric: tabular-nums;
+  /* Never transition background-color on native controls: the first frame
+     starts from the UA "Field" colour and flashes white. */
+  transition: border-color .16s ease, box-shadow .16s ease;
+}
+.dbn-cfg-input::placeholder { color: var(--dbn-fg3); }
+.dbn-cfg-input[type="number"] { max-width: 148px; }
+.dbn-cfg-select {
+  padding-right: 34px;
+  line-height: 32px;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  position: relative;
+  z-index: 0;
 }
 .dbn-cfg-input:hover,
 .dbn-cfg-select:hover { border-color: var(--dbn-line3); }
-.dbn-cfg-input::placeholder { color: var(--dbn-fg2); }
-.dbn-cfg-input[type="number"] {
-  max-width: 150px;
-  font-variant-numeric: tabular-nums;
+.dbn-cfg-input:focus,
+.dbn-cfg-select:focus {
+  outline: none;
+  border-color: var(--dbn-acc-line);
+  background-color: var(--dbn-fill);
+  box-shadow: 0 0 0 3px var(--dbn-acc-soft), 0 0 18px rgba(34, 211, 238, .22);
 }
-.dbn-cfg-select {
-  appearance: none;
-  -webkit-appearance: none;
-  padding-right: 30px;
-  cursor: pointer;
-  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%23888f99' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 11px center;
+.dbn-cfg-select option { background: var(--dbn-panel); color: var(--dbn-fg); }
+
+/* Custom caret: a decorative span keeps the native <select> semantics. */
+.dbn-cfg-select-wrap { position: relative; display: block; width: 100%; min-width: 0; }
+.dbn-cfg-caret {
+  position: absolute;
+  top: 50%;
+  right: 11px;
+  width: 15px;
+  height: 15px;
+  z-index: 2;
+  transform: translateY(-50%);
+  color: var(--dbn-fg3);
+  pointer-events: none;
+  transition: transform .22s cubic-bezier(.4, .1, .2, 1), color .18s ease;
 }
+.dbn-cfg-select-wrap:hover .dbn-cfg-caret { transform: translateY(-50%) rotate(180deg); color: var(--dbn-acc); }
+.dbn-cfg-select-wrap:focus-within .dbn-cfg-caret { color: var(--dbn-acc); }
+
+/* Checkbox rendered as a switch (same input, same onChange). */
 .dbn-cfg-check {
-  position: relative;
   appearance: none;
   -webkit-appearance: none;
-  width: 16px;
-  height: 16px;
-  margin: 0;
+  position: relative;
   flex: none;
+  width: 38px;
+  height: 21px;
+  margin: 0;
   border: var(--dbn-hair) solid var(--dbn-ctl-line);
-  border-radius: 5px;
+  border-radius: 999px;
   background: var(--dbn-fill);
   cursor: pointer;
-  transition: background-color .12s ease, border-color .12s ease;
+  transition: border-color .18s ease, box-shadow .18s ease;
 }
-.dbn-cfg-check:hover { border-color: var(--dbn-fg2); }
-.dbn-cfg-check:checked {
-  border-color: var(--dbn-accent);
-  background: color-mix(in srgb, var(--dbn-accent) 18%, transparent);
-}
-.dbn-cfg-check:checked::after {
+.dbn-cfg-check::before {
   content: "";
   position: absolute;
-  left: 4.5px;
-  top: 1.5px;
-  width: 4px;
-  height: 8px;
-  border-right: 2px solid var(--dbn-accent);
-  border-bottom: 2px solid var(--dbn-accent);
-  transform: rotate(42deg);
+  top: 2px;
+  left: 2px;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: #cdd6e4;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, .45);
+  transition: transform .18s cubic-bezier(.4, .1, .2, 1), background-color .18s ease, box-shadow .18s ease;
 }
+.dbn-cfg-check:hover { border-color: var(--dbn-line3); }
+.dbn-cfg-check:checked {
+  border-color: var(--dbn-acc-line);
+  background: linear-gradient(90deg, var(--dbn-acc-soft), rgba(109, 156, 255, .28));
+  box-shadow: 0 0 0 1px var(--dbn-acc-line), 0 0 14px rgba(34, 211, 238, .3);
+}
+.dbn-cfg-check:checked::before {
+  transform: translateX(17px);
+  background: #e9fbff;
+  box-shadow: 0 0 10px rgba(34, 211, 238, .85), 0 1px 2px rgba(0, 0, 0, .4);
+}
+
+/* Range: thin track, glowing thumb. --pct drives the filled segment. */
 .dbn-cfg-range {
   flex: 1 1 auto;
   width: 100%;
   min-width: 0;
   height: 20px;
   margin: 0;
-  accent-color: var(--dbn-accent);
+  background: transparent;
+  appearance: none;
+  -webkit-appearance: none;
   cursor: pointer;
+}
+.dbn-cfg-range::-webkit-slider-runnable-track {
+  height: 4px;
+  border-radius: 999px;
+  background:
+    linear-gradient(90deg, var(--dbn-acc) 0%, var(--dbn-acc2) var(--pct, 50%),
+      rgba(255, 255, 255, .10) var(--pct, 50%), rgba(255, 255, 255, .10) 100%);
+}
+.dbn-cfg-range::-webkit-slider-thumb {
+  width: 15px;
+  height: 15px;
+  margin-top: -5.5px;
+  border: 1px solid rgba(255, 255, 255, .7);
+  border-radius: 50%;
+  background: radial-gradient(circle at 32% 28%, #f2feff, #22d3ee 62%, #0e9bb5);
+  appearance: none;
+  -webkit-appearance: none;
+  box-shadow:
+    0 0 0 3px rgba(34, 211, 238, .16),
+    0 0 14px rgba(34, 211, 238, .65),
+    0 0 26px rgba(34, 211, 238, .35),
+    inset 0 -1px 2px rgba(0, 90, 110, .55),
+    inset 0 1px 2px rgba(255, 255, 255, .9);
+  transition: box-shadow .16s ease, transform .16s ease;
+}
+.dbn-cfg-range:hover::-webkit-slider-thumb {
+  box-shadow:
+    0 0 0 5px rgba(34, 211, 238, .2),
+    0 0 20px rgba(34, 211, 238, .85),
+    0 0 34px rgba(34, 211, 238, .45),
+    inset 0 -1px 2px rgba(0, 90, 110, .5),
+    inset 0 1px 2px rgba(255, 255, 255, .95);
+}
+.dbn-cfg-range:active::-webkit-slider-thumb { transform: scale(1.06); }
+.dbn-cfg-range::-moz-range-track { height: 4px; border-radius: 999px; background: var(--dbn-acc-soft); }
+.dbn-cfg-range::-moz-range-thumb {
+  width: 15px; height: 15px; border: 1px solid rgba(255, 255, 255, .7); border-radius: 50%;
+  background: radial-gradient(circle at 32% 28%, #f2feff, #22d3ee 62%, #0e9bb5);
+  box-shadow: 0 0 0 3px rgba(34, 211, 238, .16), 0 0 14px rgba(34, 211, 238, .65);
 }
 .dbn-cfg-value {
   flex: none;
-  min-width: 36px;
+  min-width: 38px;
   text-align: right;
   font-size: 12px;
   font-variant-numeric: tabular-nums;
-  color: var(--dbn-fg2);
+  color: var(--dbn-acc);
+  text-shadow: 0 0 10px rgba(34, 211, 238, .45);
 }
+
 .dbn-cfg :is(input, select, button):focus-visible {
-  outline: 2px solid var(--dsw-focus-ring-color, var(--dbn-accent));
+  outline: 2px solid var(--dsw-focus-ring-color, var(--dbn-acc));
   outline-offset: 1px;
 }
-/* The toolbar is sticky: a control focused by keyboard or by clicking its
-   label must not scroll flush under it. */
 .dbn-cfg :is(input, select, button, textarea) { scroll-margin-block: 64px; }
 
 /* ---- media pool ---------------------------------------------------- */
@@ -518,6 +640,31 @@ window.__ModuleLoader__.load({
   cursor: pointer;
 }
 .dbn-cfg-media-row:hover { background: var(--dbn-hover); }
+/* The media list keeps a compact square checkbox: the switch shape belongs
+   to standalone on/off fields, not to per-file selection. */
+.dbn-cfg-media .dbn-cfg-check {
+  width: 16px;
+  height: 16px;
+  border-radius: 5px;
+}
+.dbn-cfg-media .dbn-cfg-check::before { display: none; }
+.dbn-cfg-media .dbn-cfg-check:checked {
+  border-color: var(--dbn-acc);
+  background: var(--dbn-acc);
+  box-shadow: 0 0 10px var(--dbn-acc-soft);
+}
+.dbn-cfg-media .dbn-cfg-check:checked::after {
+  content: "";
+  position: absolute;
+  left: 4.5px;
+  top: 1.5px;
+  width: 4px;
+  height: 8px;
+  border: solid var(--dbn-panel);
+  border-width: 0 2px 2px 0;
+  border-radius: 1px;
+  transform: rotate(42deg);
+}
 .dbn-cfg-media-name {
   overflow: hidden;
   text-overflow: ellipsis;
@@ -528,7 +675,7 @@ window.__ModuleLoader__.load({
   flex: none;
   font-size: 11px;
   font-variant-numeric: tabular-nums;
-  color: var(--dbn-fg2);
+  color: var(--dbn-fg3);
 }
 .dbn-cfg-mini {
   margin: 2px 0 0;
@@ -542,17 +689,27 @@ window.__ModuleLoader__.load({
   font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
   font-size: 11px;
   line-height: 16px;
-  color: var(--dbn-fg2);
+  color: var(--dbn-fg3);
   word-break: break-all;
   user-select: text;
 }
 
+/* ---- narrow: one column per field row ------------------------------ */
 @container (max-width: 820px) {
-  .dbn-cfg-grid { grid-template-columns: minmax(0, 1fr); }
+  .dbn-cfg-grid { grid-template-columns: minmax(0, 1fr); row-gap: 10px; }
   .dbn-cfg-field { grid-template-columns: 128px minmax(0, 1fr); }
+  .dbn-cfg-card { padding: 13px 13px 14px; }
+}
+@container (max-width: 560px) {
+  .dbn-cfg-field { grid-template-columns: 108px minmax(0, 1fr); }
+}
+@media (max-width: 560px) {
+  .dbn-cfg-grid { grid-template-columns: minmax(0, 1fr); }
+  .dbn-cfg-field { grid-template-columns: 108px minmax(0, 1fr); }
 }
 @media (prefers-reduced-motion: reduce) {
-  .dbn-cfg-btn, .dbn-cfg-chev { transition: none; }
+  .dbn-cfg-btn, .dbn-cfg-chev, .dbn-cfg-caret, .dbn-cfg-check, .dbn-cfg-check::before,
+  .dbn-cfg-range::-webkit-slider-thumb { transition: none; }
 }
 `
 
@@ -699,17 +856,37 @@ window.__ModuleLoader__.load({
 
       function field(label, control, hint) {
         var id = (control.props && control.props.id) || nextId('f')
-        var kind = control.type === 'select' ? 'dbn-cfg-select' : 'dbn-cfg-input'
+        var isSelect = control.type === 'select'
+        var kind = isSelect ? 'dbn-cfg-select' : 'dbn-cfg-input'
         var hintId = hint ? id + '-hint' : undefined
+        var input = React.cloneElement(control, {
+          id: id,
+          className: [control.props.className, kind].filter(Boolean).join(' '),
+          'aria-describedby': hintId,
+        })
+        /* The caret is decoration only: the native <select> keeps its role,
+           its name (from <label for>) and its keyboard behaviour. */
+        var controlNode = isSelect
+          ? h('span', { className: 'dbn-cfg-select-wrap' }, input, caretSvg())
+          : input
         return h('div', { className: 'dbn-cfg-field', key: label },
           h('label', { className: 'dbn-cfg-label', htmlFor: id }, label),
-          h('div', { className: 'dbn-cfg-control' },
-            React.cloneElement(control, {
-              id: id,
-              className: [control.props.className, kind].filter(Boolean).join(' '),
-              'aria-describedby': hintId,
-            })),
+          h('div', { className: 'dbn-cfg-control' }, controlNode),
           hint ? h('p', { className: 'dbn-cfg-hint', id: hintId }, hint) : null)
+      }
+
+      function caretSvg() {
+        return h('svg', {
+          className: 'dbn-cfg-caret',
+          viewBox: '0 0 24 24',
+          fill: 'none',
+          stroke: 'currentColor',
+          strokeWidth: 2,
+          strokeLinecap: 'round',
+          strokeLinejoin: 'round',
+          'aria-hidden': 'true',
+          focusable: 'false',
+        }, h('path', { d: 'm6 9 6 6 6-6' }))
       }
 
       function switchField(label, checked, onChange) {
@@ -740,10 +917,41 @@ window.__ModuleLoader__.load({
               max: 1,
               step: 0.05,
               value: value,
+              /* --pct paints the filled part of the track; CSS cannot know
+                 the value on its own. */
+              style: { '--pct': Math.round(Math.max(0, Math.min(1, Number(value) || 0)) * 100) + '%' },
               'aria-valuetext': text,
               onChange: number(path),
             }),
             h('span', { className: 'dbn-cfg-value', 'aria-hidden': 'true' }, text)))
+      }
+
+      /* Section icons: tiny, decorative, keyed by the section title. */
+      var SECTION_ICONS = [
+        [/^(片头|片头动画)/, ['M8 5.6v12.8L19 12z']],
+        [/suite|原版/i, ['M12 3.2 3.4 7.9 12 12.6l8.6-4.7z', 'm3.4 12.3 8.6 4.7 8.6-4.7', 'm3.4 16.6 8.6 4.7 8.6-4.7']],
+        [/屏保/, ['M20.2 14.6A8.6 8.6 0 0 1 9.4 3.8a8.6 8.6 0 1 0 10.8 10.8z']],
+        [/素材/, ['M3.2 7.4A2.4 2.4 0 0 1 5.6 5h3l2 2.4h8.8A2.4 2.4 0 0 1 21.8 9.8v7A2.4 2.4 0 0 1 19.4 19.2H5.6a2.4 2.4 0 0 1-2.4-2.4z']],
+        [/高级|设置/, ['M4 8h9M17 8h3M4 16h5M13 16h7', 'M15 8a2 2 0 1 0-4 0 2 2 0 0 0 4 0z', 'M11 16a2 2 0 1 0-4 0 2 2 0 0 0 4 0z']],
+      ]
+
+      function sectionIcon(title) {
+        var paths = null
+        for (var i = 0; i < SECTION_ICONS.length; i++) {
+          if (SECTION_ICONS[i][0].test(String(title))) { paths = SECTION_ICONS[i][1]; break }
+        }
+        if (!paths) paths = ['M12 4.2v15.6M4.2 12h15.6']
+        return h('svg', {
+          className: 'dbn-cfg-card-ico',
+          viewBox: '0 0 24 24',
+          fill: 'none',
+          stroke: 'currentColor',
+          strokeWidth: 1.7,
+          strokeLinecap: 'round',
+          strokeLinejoin: 'round',
+          'aria-hidden': 'true',
+          focusable: 'false',
+        }, paths.map(function (d, index) { return h('path', { key: index, d: d }) }))
       }
 
       function section(title, children, options) {
@@ -752,16 +960,26 @@ window.__ModuleLoader__.load({
         var opts = options || {}
         var sub = opts.level === 2
         var titleId = nextId('g')
+        var grid = h('div', { className: 'dbn-cfg-grid' + (opts.stack ? ' dbn-cfg-grid--stack' : '') }, children)
+        if (sub) {
+          return h('section', {
+            className: 'dbn-cfg-sub',
+            key: title,
+            'aria-labelledby': titleId,
+          },
+            h('h5', { className: 'dbn-cfg-subtitle', id: titleId }, title),
+            grid)
+        }
         return h('section', {
-          className: sub ? 'dbn-cfg-sub' : 'dbn-cfg-sec',
+          className: 'dbn-cfg-sec',
           key: title,
           'aria-labelledby': titleId,
         },
-          h(sub ? 'h5' : 'h4', {
-            className: sub ? 'dbn-cfg-subtitle' : 'dbn-cfg-title',
-            id: titleId,
-          }, title),
-          h('div', { className: 'dbn-cfg-grid' + (opts.stack ? ' dbn-cfg-grid--stack' : '') }, children))
+          h('div', { className: 'dbn-cfg-card' },
+            h('div', { className: 'dbn-cfg-card-head' },
+              sectionIcon(title),
+              h('h4', { className: 'dbn-cfg-title', id: titleId }, title)),
+            grid))
       }
 
       function suiteText(label, key, hint) {

@@ -1,7 +1,7 @@
 {
-  "version": "0.5.5",
+  "version": "0.6.0",
   "bytes": 58284,
-  "sha256": "7df8713d005394782e832fbb79f7937deb3d00fba0585fccc4106559c2778e76",
+  "sha256": "4fcfed9ebaaf6b4858985ee2761b01a5e8141afce419a76afbd5c4a3153ad883",
   "files": [
     "00-constants.js",
     "10-fsm.js",
