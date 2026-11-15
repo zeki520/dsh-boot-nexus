@@ -261,10 +261,14 @@ window.__ModuleLoader__.load({
 .dbn-cfg-pill[data-on="true"]::before { box-shadow: 0 0 8px var(--dbn-on); }
 .dbn-cfg-version {
   flex: none;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--dbn-fg) 5%, transparent);
   font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
-  font-size: 11px;
-  letter-spacing: .02em;
-  color: var(--dbn-fg3);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: .01em;
+  color: var(--dbn-fg2);
   font-variant-numeric: tabular-nums;
 }
 .dbn-cfg-spacer { flex: 1 1 auto; min-width: 4px; }
